@@ -1,6 +1,5 @@
-import { contextBridge, ipcRenderer } from 'electron'
+const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.executeInMainWorld('electronAPI', {
-  openFile: () => ipcRenderer.invoke('open-file'),
-  saveFile: (data) => ipcRenderer.invoke('save-file', data)
-})
+contextBridge.exposeInMainWorld('electronAPI', {
+  openFile: () => ipcRenderer.invoke('open-file')
+});
