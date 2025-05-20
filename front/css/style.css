@@ -84,13 +84,13 @@ body {
   justify-content: start;
   align-items: center;
   gap: 20px;
-  border-right: 2px solid #17112579;
+  border-right: 1.3px solid #3e3f3e2c;
 }
 
 /* Editor */
 
 .header-editor {
-  border-bottom: 1.3px solid #8bcc7762;
+  border-bottom: 1.3px solid #3e3f3e2c;
   /* border: 1px dashed #777dcc; */
 }
 
@@ -174,7 +174,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 4px;
-  border-left: 2px solid #17112579;
+  border-left: 1.3px solid #3e3f3e2c;
 }
 
 .right-panel>i:hover {
@@ -201,7 +201,7 @@ body {
   display: flex;
   justify-content: end;
   padding-right: 20px;
-  border-top: 2px solid #17112579;
+  border-top: 1.3px solid #3e3f3e2c;
 }
 
 .footer-app>div {
