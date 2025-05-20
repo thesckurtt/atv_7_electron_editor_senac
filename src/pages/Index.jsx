@@ -32,8 +32,9 @@ const Index = () => {
         </div>
         <div className="editor">
           <div className="header-editor d-flex flex-row">
-            {fileName && <div className="d-flex flex-row header-editor-tab active"><span className="fs-6"><i className="fa-solid fa-file-code"></i>
-              {fileName}</span><i className="fa-solid fa-xmark"></i></div>}
+            {fileName && <div className="d-flex flex-row header-editor-tab active"><span className="fs-6" >
+              <i className="fa-solid fa-file-code"></i>
+              <span contentEditable="true">{fileName}</span></span><i className="fa-solid fa-xmark"></i></div>}
             {/* <div className="d-flex flex-row header-editor-tab"><span className="fs-6"><i className="fa-solid fa-file-code"></i>
               outro.json</span><i className="fa-solid fa-xmark"></i></div> */}
           </div>
