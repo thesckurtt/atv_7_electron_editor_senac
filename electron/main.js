@@ -50,7 +50,6 @@ ipcMain.handle('save-file', async (event, data) => {
   console.log(data)
 })
 
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
