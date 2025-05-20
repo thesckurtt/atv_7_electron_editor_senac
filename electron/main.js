@@ -6,20 +6,45 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+let mainWindow = undefined
+
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
     }
   });
-
-  win.loadURL('http://localhost:5173');
+  mainWindow.webContents.openDevTools();
+  mainWindow.setMenu(null)
+  mainWindow.loadURL('http://localhost:5173');
 }
 
 app.whenReady().then(createWindow);
+
+ipcMain.handle('open-file', async () => {
+  // console.log('Abrindo diálogo de arquivo...');
+  try {
+    const result = await dialog.showOpenDialog({
+      title: 'Selecione um arquivo JSON',
+      defaultPath: app.getPath('downloads'),
+      filters: [{ name: 'JSON Files', extensions: ['json'] }],
+      properties: ['openFile'],
+    });
+
+    if (result.canceled) return { cancelado: true };
+    const filePath = result.filePaths[0];
+    const fileName = path.basename(filePath)
+    const content = await fs.readFile(filePath, 'utf-8');
+
+    return { content, fileName };
+  } catch (error) {
+    return { error: error.message };
+  }
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
