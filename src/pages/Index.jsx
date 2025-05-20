@@ -4,6 +4,7 @@ import { json } from '@codemirror/lang-json';
 const Index = () => {
   const [fileContent, setFileContent] = useState('');
   const [fileName, setFileName] = useState('');
+
   function openFile() {
     window.electronAPI.openFile().then(result => {
       if (!result.cancelado) {
@@ -12,12 +13,20 @@ const Index = () => {
       }
     });
   }
+
+  async function saveFile() {
+    const response = await window.electronAPI.saveFile(fileContent)
+
+    if (response && response.error) {
+      alert("Erro ao salvar arquivo!")
+    }
+  }
   return (
     <>
       <div className="middle-content">
         <div className="left-panel">
           <i className="fa-solid fa-folder-open" onClick={openFile}></i>
-          <i className="fa-solid fa-floppy-disk"></i>
+          <i className="fa-solid fa-floppy-disk" onClick={saveFile}></i>
           <i className="fa-solid fa-share-nodes"></i>
           <i className="fa-solid fa-file-pdf"></i>
         </div>
