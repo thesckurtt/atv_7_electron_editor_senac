@@ -11,6 +11,8 @@
     "start": "concurrently -k \"npm:dev\" \"npm:electron\""
   },
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.1",
+    "@uiw/react-codemirror": "^4.23.12",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
