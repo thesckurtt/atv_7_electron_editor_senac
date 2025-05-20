@@ -18,7 +18,7 @@ function createWindow() {
       nodeIntegration: false,
     }
   });
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   mainWindow.setMenu(null)
   mainWindow.loadURL('http://localhost:5173');
 }
@@ -45,6 +45,11 @@ ipcMain.handle('open-file', async () => {
     return { error: error.message };
   }
 });
+
+ipcMain.handle('save-file', async (event, data) => {
+  console.log(data)
+})
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
