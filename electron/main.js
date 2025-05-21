@@ -47,8 +47,27 @@ ipcMain.handle('open-file', async () => {
 });
 
 ipcMain.handle('save-file', async (event, data) => {
-  console.log(data)
-})
+  try {
+    const result = await dialog.showSaveDialog({
+      title: 'Salvar arquivo JSON',
+      defaultPath: path.join(app.getPath('downloads'), data.fileName || 'new.json'),
+      filters: [{ name: 'JSON Files', extensions: ['json'] }],
+    });
+
+    if (result.canceled) return { cancelado: true };
+
+    const filePath = result.filePath;
+    await fs.writeFile(filePath, data.content, 'utf-8');
+
+    return { sucesso: true, filePath };
+  } catch (error) {
+    return { error: error.message };
+  }
+});
+
+// ipcMain.handle('save-file', async (event, data) => {
+//   console.log(data)
+// })
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
