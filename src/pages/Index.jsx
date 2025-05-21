@@ -46,7 +46,7 @@ const Index = () => {
     }
     const response = await window.electronAPI.saveFile(data)
 
-    if(response.sucesso){
+    if (response.sucesso) {
       alert('Arquivo salvo com sucesso!')
     }
     if (response && response.error) {
@@ -100,7 +100,13 @@ const Index = () => {
           <div className="header-editor d-flex flex-row">
             {fileName && <div className="d-flex flex-row header-editor-tab active"><span className="fs-6" >
               <i className="fa-solid fa-file-code"></i>
-              <span contentEditable="true">{fileName}</span></span><i className="fa-solid fa-xmark" onClick={closeTab}></i></div>}
+              <span
+                contentEditable="true"
+                suppressContentEditableWarning={true}
+                onInput={(e) => setFileName(e.currentTarget.textContent)}>
+                {fileName}
+              </span>
+            </span><i className="fa-solid fa-xmark" onClick={closeTab}></i></div>}
             {/* <div className="d-flex flex-row header-editor-tab"><span className="fs-6"><i className="fa-solid fa-file-code"></i>
               outro.json</span><i className="fa-solid fa-xmark"></i></div> */}
           </div>
@@ -174,7 +180,7 @@ const Index = () => {
           <Button variant="secondary" onClick={handleClose}>
             Fechar
           </Button>
-          <Button variant="primary" onClick={() => {handleClose(); saveUser()}}>
+          <Button variant="primary" onClick={() => { handleClose(); saveUser() }}>
             Salvar
           </Button>
         </Modal.Footer>
