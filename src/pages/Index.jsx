@@ -14,6 +14,18 @@ const Index = () => {
     });
   }
 
+  function handleCodeMirrorChange(value) {
+    if (!fileName) {
+      setFileName('new.json')
+    }
+    setFileContent(value)
+  }
+
+  function closeTab() {
+    setFileName('')
+    setFileContent('')
+  }
+
   async function saveFile() {
     const response = await window.electronAPI.saveFile(fileContent)
 
@@ -34,7 +46,7 @@ const Index = () => {
           <div className="header-editor d-flex flex-row">
             {fileName && <div className="d-flex flex-row header-editor-tab active"><span className="fs-6" >
               <i className="fa-solid fa-file-code"></i>
-              <span contentEditable="true">{fileName}</span></span><i className="fa-solid fa-xmark"></i></div>}
+              <span contentEditable="true">{fileName}</span></span><i className="fa-solid fa-xmark" onClick={closeTab}></i></div>}
             {/* <div className="d-flex flex-row header-editor-tab"><span className="fs-6"><i className="fa-solid fa-file-code"></i>
               outro.json</span><i className="fa-solid fa-xmark"></i></div> */}
           </div>
@@ -43,7 +55,7 @@ const Index = () => {
               value={fileContent}
               height="100%"
               extensions={[json()]}
-              onChange={(value) => setFileContent(value)}
+              onChange={(value) => handleCodeMirrorChange(value)}
               theme="dark"
             />
           </div>
