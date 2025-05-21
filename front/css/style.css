@@ -156,6 +156,10 @@ body {
   overflow: hidden;
 }
 
+.c-pointer {
+  cursor: pointer !important;
+}
+
 .add-profile {
   display: flex;
   justify-content: center;
