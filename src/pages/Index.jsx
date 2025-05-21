@@ -1,9 +1,22 @@
 import React, { useState } from 'react'
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
+import { Modal, Button, Form, InputGroup } from 'react-bootstrap';
+
 const Index = () => {
   const [fileContent, setFileContent] = useState('');
   const [fileName, setFileName] = useState('');
+  const [show, setShow] = useState(false);
+
+  const [gitHubUsername, setGitHubUsername] = useState('')
+  const [gitHubToken, setGitHubToken] = useState('')
+  const [gitHubProfileImg, setGitHubProfileImg] = useState('')
+
+  const [user, setUser] = useState({});
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
 
   function openFile() {
     window.electronAPI.openFile().then(result => {
@@ -62,10 +75,11 @@ const Index = () => {
         </div>
         <div className="right-panel">
           <div className="d-flex flex-column justify-content-center align-items-center mt-4">
-            <div className="container-img-profile my-1">
-              <img src="https://avatars.githubusercontent.com/u/36058994?v=4" alt="" />
-            </div>
-            <div className="add-profile my-1">
+            {user && user.profileImg && <div className="container-img-profile my-1">
+              <img src={user.profileImg} alt={user.userName} />
+            </div>}
+
+            <div className="add-profile my-1" onClick={handleShow}>
               <i className="fa-solid fa-plus"></i>
             </div>
           </div>
@@ -76,6 +90,46 @@ const Index = () => {
         <div className="space-mono-regular"><span className="color-def">LN2, COL1</span><span className="color-def">Rows:
           30</span><span className="color-mem">Mem: 10%</span><span className="color-disk">Disk: 30%</span></div>
       </div>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Adicionar Usuário</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <InputGroup className="">
+            <InputGroup.Text id="basic-addon2"><i class="fa-solid fa-at"></i></InputGroup.Text>
+            <Form.Control
+              placeholder="GitHub User"
+              aria-label="GitHub User"
+              aria-describedby="basic-addon2"
+              value={gitHubUsername}
+              onChange={(e) => setGitHubUsername(e.target.value)}
+            />
+
+          </InputGroup>
+          {gitHubUsername && <Form.Text className="text-muted mb-3">
+            github.com/{gitHubUsername}
+          </Form.Text>}
+
+          <InputGroup className="mb-3 mt-3">
+            <InputGroup.Text id="basic-addon2"><i class="fa-solid fa-key"></i></InputGroup.Text>
+            <Form.Control
+              placeholder="Recipient's username"
+              aria-label="Token"
+              aria-describedby="basic-addon2"
+              type='pasword'
+              value={'dfff'}
+            />
+          </InputGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Fechar
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Salvar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }
