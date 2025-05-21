@@ -103,7 +103,7 @@ const Index = () => {
               <span
                 contentEditable="true"
                 suppressContentEditableWarning={true}
-                onInput={(e) => setFileName(e.currentTarget.textContent)}>
+                onInput={(e) => setFileName(e.target.textContent)}>
                 {fileName}
               </span>
             </span><i className="fa-solid fa-xmark" onClick={closeTab}></i></div>}
