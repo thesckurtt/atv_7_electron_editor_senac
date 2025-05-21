@@ -56,11 +56,13 @@ ipcMain.handle('save-file', async (event, data) => {
 
     if (result.canceled) return { cancelado: true };
 
+    // console.log(data)
     const filePath = result.filePath;
     await fs.writeFile(filePath, data.content, 'utf-8');
 
     return { sucesso: true, filePath };
   } catch (error) {
+    console.log(error)
     return { error: error.message };
   }
 });
