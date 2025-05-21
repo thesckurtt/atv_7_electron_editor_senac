@@ -39,8 +39,16 @@ const Index = () => {
   }
 
   async function saveFile() {
-    const response = await window.electronAPI.saveFile(fileContent)
+    const data = {
+      fileName: fileName,
+      content: fileContent
 
+    }
+    const response = await window.electronAPI.saveFile(data)
+
+    if(response.sucesso){
+      alert('Arquivo salvo com sucesso!')
+    }
     if (response && response.error) {
       alert("Erro ao salvar arquivo!")
     }
