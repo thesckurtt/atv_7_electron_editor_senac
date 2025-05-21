@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
-import { Modal, Button, Form, InputGroup } from 'react-bootstrap';
+import { Modal, Button, Form, InputGroup, Image } from 'react-bootstrap';
 
 const Index = () => {
   const [fileContent, setFileContent] = useState('');
@@ -11,7 +11,6 @@ const Index = () => {
   const [gitHubUsername, setGitHubUsername] = useState('')
   const [gitHubToken, setGitHubToken] = useState('')
   const [gitHubProfileImg, setGitHubProfileImg] = useState('')
-
   const [user, setUser] = useState({});
 
   const handleClose = () => setShow(false);
@@ -46,6 +45,40 @@ const Index = () => {
       alert("Erro ao salvar arquivo!")
     }
   }
+
+  function saveUser() {
+    const data = {
+      profileImage: gitHubProfileImg,
+      username: gitHubUsername,
+      token: gitHubToken
+    }
+    setUser(data)
+    setGitHubToken('')
+    setGitHubProfileImg('')
+    setGitHubUsername('')
+  }
+
+  function getGitHubProfileImg(username) {
+    if (gitHubUsername) {
+      setTimeout(async () => {
+        try {
+          const res = await fetch(`https://api.github.com/users/${gitHubUsername}`);
+          const data = await res.json();
+          // console.log(data.avatar_url);
+          if (data.avatar_url) {
+            setGitHubProfileImg(data.avatar_url)
+          } else {
+            setGitHubProfileImg('img/profile_default.png')
+          }
+        } catch (err) {
+          console.error('Erro ao buscar usuário:', err);
+        }
+      }, 500);
+    } else {
+      setGitHubProfileImg('')
+    }
+  }
+
   return (
     <>
       <div className="middle-content">
@@ -75,8 +108,8 @@ const Index = () => {
         </div>
         <div className="right-panel">
           <div className="d-flex flex-column justify-content-center align-items-center mt-4">
-            {user && user.profileImg && <div className="container-img-profile my-1">
-              <img src={user.profileImg} alt={user.userName} />
+            {user && user.profileImage && <div className="container-img-profile my-1">
+              <img src={user.profileImage} alt={user.username} />
             </div>}
 
             <div className="add-profile my-1" onClick={handleShow}>
@@ -92,32 +125,40 @@ const Index = () => {
       </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Adicionar Usuário</Modal.Title>
+          <Modal.Title>Adicionar Perfil</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className='d-flex flex-column justify-content-center align-items-center'>
+          {gitHubProfileImg && <Image
+            src={gitHubProfileImg}
+            roundedCircle
+            className='mb-3'
+            width={100}
+            alt="Avatar do GitHub"
+          />}
+          {gitHubUsername && <Form.Text className="text-muted mb-3 ">
+            github.com/{gitHubUsername}
+          </Form.Text>}
           <InputGroup className="">
-            <InputGroup.Text id="basic-addon2"><i class="fa-solid fa-at"></i></InputGroup.Text>
+            <InputGroup.Text id="username"><i class="fa-solid fa-at"></i></InputGroup.Text>
             <Form.Control
               placeholder="GitHub User"
               aria-label="GitHub User"
               aria-describedby="basic-addon2"
               value={gitHubUsername}
+              onBlur={() => getGitHubProfileImg(gitHubUsername)}
               onChange={(e) => setGitHubUsername(e.target.value)}
             />
-
           </InputGroup>
-          {gitHubUsername && <Form.Text className="text-muted mb-3">
-            github.com/{gitHubUsername}
-          </Form.Text>}
 
           <InputGroup className="mb-3 mt-3">
-            <InputGroup.Text id="basic-addon2"><i class="fa-solid fa-key"></i></InputGroup.Text>
+            <InputGroup.Text id="token"><i class="fa-solid fa-key"></i></InputGroup.Text>
             <Form.Control
-              placeholder="Recipient's username"
+              placeholder="Token"
               aria-label="Token"
               aria-describedby="basic-addon2"
-              type='pasword'
-              value={'dfff'}
+              type="password"
+              value={gitHubToken}
+              onChange={(e) => setGitHubToken(e.target.value)}
             />
           </InputGroup>
         </Modal.Body>
@@ -125,7 +166,7 @@ const Index = () => {
           <Button variant="secondary" onClick={handleClose}>
             Fechar
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={() => {handleClose(); saveUser()}}>
             Salvar
           </Button>
         </Modal.Footer>
